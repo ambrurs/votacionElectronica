@@ -29,10 +29,10 @@
             }
             
             #formDos{
-                /*display: none;*/
+                display: none;
             }
             
-            .empresaPertenece{
+            .empresaPertenece, .empresaNombre{
                 display: none;
             }
         </style>
@@ -56,7 +56,7 @@
    
             </h:form>
             <button id="registrarse" class="btn btn-lg btn-primary btn-block" onclick="registrar();"  > Registrarse </button>
-            
+            <!-- Formulario de registro -->
              <h:form id="formDos" class="form-signin" >
                  <h:message id="messages" for="formDos" />
                  <div id="registrarse" >
@@ -84,14 +84,19 @@
                      </div>
                      <div class="form-group input-group empresaPertenece">
                         <h:outputLabel for="empresaAsociada" value="Empresa a la que pertenece:"  />
-                        <h:inputText value="#{crearUsuariosControlller.empresaSearch}" class="form-control"  a:placeholder="Nit"   />
-                        <span class="input-group-btn"  >
-                            <h:commandButton   class="btn btn-default btn-lg" value="Buscar" action="#{crearUsuariosControlller.buscarEmpresa()}">
-                              
-                            <span class="glyphicon glyphicon-search"></span> Search
-                          </h:commandButton>    
-                        </span>
-                      </div>
+                        <h:inputText value="#{crearUsuariosControlller.empresaSearch}" class="form-control"  a:placeholder="Nit"   >
+                                <f:ajax execute="@this " 
+                                        event="change" listener="#{crearUsuariosControlller.buscarEmpresa()}" render="@this"  />
+                        </h:inputText>
+                     </div>
+
+                     <div class="form-group">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="numeroDocumento" value="Número de documento:" />
+                        <h:inputText class="form-control" id="numeroDocumento" value="#{crearUsuariosControlller.numeroDocumento}" />
+                     </div> 
+
+
                      <div class="form-group  empresaPertenece">
                         <h:outputLabel for="razonSocialB" value="Razon social:"  />
                         <h:inputText id="razonSocialB" value="" class="form-control"  a:placeholder="Razon Social" readonly="true"   />
@@ -99,7 +104,40 @@
                         <h:inputText id="nitB" value="" class="form-control"  a:placeholder="Nit" readonly="true"   />
 
                      </div>
+                     
+                     <div class="form-group empresaNombre">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="nombreEmpresa" value="Nombre empresa:" />
+                        <h:inputText class="form-control" id="nombreEmpresa" value="#{crearUsuariosControlller.nombreEmpresa}" />
+                     </div>
 
+                      <div class="form-group empresaPertenece">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="primerNombre" value="Primer Nombre:" />
+                        <h:inputText class="form-control" id="primerNombre" value="#{crearUsuariosControlller.primerNombre}" />
+                     </div>
+
+                      <div class="form-group empresaPertenece">                     
+                        <h:outputLabel for="segundoNombre" value="Segundo Nombre:" />
+                        <h:inputText class="form-control" id="segundoNombre" value="#{crearUsuariosControlller.segundoNombre}" />
+                     </div>
+
+                     <div class="form-group empresaPertenece">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="nombreEmpresa" value="Primer Apellido:" />
+                        <h:inputText class="form-control" id="primerApellido" value="#{crearUsuariosControlller.primerApellido}" />
+                     </div>
+                     
+                     <div class="form-group empresaPertenece">
+                        <h:outputLabel for="segundoApellido" value="Segundo apellido:" />
+                        <h:inputText class="form-control" id="segundoApellido" value="#{crearUsuariosControlller.segundoApellido}" />
+                     </div>
+                     
+                     <div class="form-group">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="correo" value="Correo electronico:" />
+                        <h:inputText class="form-control" id="correo" value="#{crearUsuariosControlller.correoElectronico}" />
+                     </div>
                      
                  </div>
              </h:form>
@@ -123,7 +161,9 @@
                 var tipoUsuario = $('.selectTipoUsuario')[0];
                 if(tipoUsuario.value == 3){
                     $('.empresaPertenece').show();
+                    $('.empresaNombre').hide();
                 }else{
+                    $('.empresaNombre').show();
                     $('.empresaPertenece').hide();
                 }
             }

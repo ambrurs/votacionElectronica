@@ -38,10 +38,20 @@ public class CrearUsuariosControlller implements Serializable{
      private Usuario usuario;
      private Integer tipoUsuario;
      private Integer tipoDocumento;
-     public String nitBusqueda;
+     private String nitBusqueda;
      private String empresaSearch;
      private String nitSearch;
      private Integer consPersonaSearch;
+     private String primerNombre;
+     private String segundoNombre;
+     private String primerApellido;
+     private String segundoApellido;
+     private String correoElectronico;
+     private String nombreEmpresa;
+     private String nombreUsuario;
+     private String numeroDocumento;
+     
+     
      private Persona persona;
      private List<TipoDocumento> listDocumento;
      private List<TipoUsuario> listUsuario;
@@ -112,11 +122,9 @@ public class CrearUsuariosControlller implements Serializable{
         String mensaje = "";
         String redireccionar = "";
         try{
-           if(validarUsuario(usuario.getNombreUsuario())){ 
-                usuario.setActivo('N');
-                usuarioDao.create(usuario);
-                persona.setConsUsuario(usuario);
-                personaDao.create(persona);
+           if(validarUsuario(nombreUsuario)){
+                Integer consUsuario = guardarUsuario();
+                gudardarPersona(consUsuario);
                 mensaje = "Usuario registrado satisfactoriamente ";
                 redireccionar ="index.xhtml";
            }else{
@@ -132,6 +140,33 @@ public class CrearUsuariosControlller implements Serializable{
         return redireccionar;
     }
 
+    private Integer guardarUsuario(){
+        Usuario usuario = new Usuario();
+        usuario.setActivo('N');
+        usuario.setNombreUsuario(nombreUsuario);
+        usuario.setIdTipoUsuario(new TipoUsuario(this.tipoUsuario));
+        usuarioDao.create(usuario);
+        return usuario.getConsUsuario();
+    }
+    
+    private void gudardarPersona(Integer consUsuario){
+        Persona persona = new Persona();
+        persona.setConsUsuario(new Usuario(consUsuario));
+        persona.setNumeroDocumento(this.numeroDocumento);
+        persona.setIdTipoDocumento(new TipoDocumento(this.tipoDocumento));
+        persona.setCorreo(this.correoElectronico);
+        if(this.tipoUsuario == 2){
+          persona.setNombreEmpresa(this.nombreEmpresa);
+        }else{
+          persona.setPrimerNombre(this.primerNombre);
+          persona.setSegundoNombre(this.segundoNombre);
+          persona.setPrimerApellido(this.primerApellido);
+          persona.setSegundoApellido(this.segundoApellido);
+          persona.setConsPersonaAsociada(new Persona(this.consPersonaSearch));
+        }
+        personaDao.create(persona);
+    }
+    
     /**Get and set**/
     public Usuario getUsuario() {
         return usuario;
@@ -229,6 +264,70 @@ public class CrearUsuariosControlller implements Serializable{
 
     public void setConsPersonaSearch(Integer consPersonaSearch) {
         this.consPersonaSearch = consPersonaSearch;
+    }
+
+    public String getPrimerNombre() {
+        return primerNombre;
+    }
+
+    public void setPrimerNombre(String primerNombre) {
+        this.primerNombre = primerNombre;
+    }
+
+    public String getSegundoNombre() {
+        return segundoNombre;
+    }
+
+    public void setSegundoNombre(String segundoNombre) {
+        this.segundoNombre = segundoNombre;
+    }
+
+    public String getPrimerApellido() {
+        return primerApellido;
+    }
+
+    public void setPrimerApellido(String primerApellido) {
+        this.primerApellido = primerApellido;
+    }
+
+    public String getSegundoApellido() {
+        return segundoApellido;
+    }
+
+    public void setSegundoApellido(String segundoApellido) {
+        this.segundoApellido = segundoApellido;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
     }
 
     
