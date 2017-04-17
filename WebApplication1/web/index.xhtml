@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <script  src="https://code.jquery.com/jquery-3.2.1.min.js"></script>        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"  ></script>
+
+        <style>
+            .container{
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            .form-signin, #login, #registrarse{
+                margin: 0 auto;  
+            } 
+            
+            #login, #registrarse{
+                width: 60%;
+                /*text-align: center;*/
+                margin-top: 10px;
+            }
+            
+            #formDos{
+                /*display: none;*/
+            }
+            
+            .empresaPertenece{
+                display: none;
+            }
+        </style>
+        
+        
+    </h:head>
+    <h:body>
+        
+         <div class="container" >
+             
+            <h:form id="form" class="form-signin" >
+                
+                <div id="login" >
+                    <h2 class="form-signin-heading" align="center"> Inicio de Sesión </h2>
+                    <h:outputLabel for="inputUsuario" class="sr-only"> Usuario </h:outputLabel>
+                    <h:inputText  id="inputUsuario"  class="form-control" a:placeholder="Usuario"  />
+                    <h:outputLabel for="inputPass" class="sr-only">Contraseña</h:outputLabel>
+                    <h:inputSecret  id="inputPass" class="form-control" a:placeholder="Contraseña" />
+                    <h:commandButton class="btn btn-lg btn-primary btn-block"  value="Iniciar sesion"  action="#{crearUsuariosControlller}" />
+                </div>
+   
+            </h:form>
+            <button id="registrarse" class="btn btn-lg btn-primary btn-block" onclick="registrar();"  > Registrarse </button>
+            
+             <h:form id="formDos" class="form-signin" >
+                 <h:message id="messages" for="formDos" />
+                 <div id="registrarse" >
+                     <h2 class="form-signin-heading" align="center"> Registrar Usuario </h2>
+                    <div class="form-group" >
+                        <span style="color: red"  >*</span>
+                        <h:outputLabel style="text-align: left;" for="tipoUsuario" value="Tipo de usuario:" /> 
+                        <h:selectOneMenu  class="custom-select mb-2 mr-sm-2 mb-sm-0 form-control selectTipoUsuario" label="Tipo de usuario"
+                                          id="tipoUsuario" value="#{crearUsuariosControlller.tipoUsuario}" onchange="verEmpresa();" >
+                            <f:selectItem itemValue=" Seleccione"  />
+                            <f:selectItems var="usurio" itemLabel="#{usurio.nombreUsuario}" itemValue="#{usurio.idTipoUsuario}"
+                                value="#{crearUsuariosControlller.listUsuario}" />
+                            <f:ajax event="change" listener="#{crearUsuariosControlller.obtenerTipoDocumento()}" render="tipoDocumento" />
+                        </h:selectOneMenu>
+                     </div>
+                     <div class="form-group">
+                        <span style="color: red"  >*</span>                     
+                        <h:outputLabel for="tipoDocumento" value="Tipo documento:" />
+                        <h:selectOneMenu id="tipoDocumento" class="custom-select mb-2 mr-sm-2 mb-sm-0 form-control"
+                                         value="#{crearUsuariosControlller.tipoDocumento}" label="Tipo documento">
+                            <f:selectItem itemValue="Seleccione" />
+                            <f:selectItems  var="documento" itemLabel="#{documento.nombreDocumento}" itemValue="#{documento.idTipoDocumento}"
+                                value="#{crearUsuariosControlller.listDocumento}" />
+                        </h:selectOneMenu>
+                     </div>
+                     <div class="form-group input-group empresaPertenece">
+                        <h:outputLabel for="empresaAsociada" value="Empresa a la que pertenece:"  />
+                        <h:inputText value="#{crearUsuariosControlller.empresaSearch}" class="form-control"  a:placeholder="Nit"   />
+                        <span class="input-group-btn"  >
+                            <h:commandButton   class="btn btn-default btn-lg" value="Buscar" action="#{crearUsuariosControlller.buscarEmpresa()}">
+                              
+                            <span class="glyphicon glyphicon-search"></span> Search
+                          </h:commandButton>    
+                        </span>
+                      </div>
+                     <div class="form-group  empresaPertenece">
+                        <h:outputLabel for="razonSocialB" value="Razon social:"  />
+                        <h:inputText id="razonSocialB" value="" class="form-control"  a:placeholder="Razon Social" readonly="true"   />
+                        <h:outputLabel for="nitB" value="Empresa a la que pertenece:"  />
+                        <h:inputText id="nitB" value="" class="form-control"  a:placeholder="Nit" readonly="true"   />
+
+                     </div>
+
+                     
+                 </div>
+             </h:form>
+             
+          </div> 
+        
+        <script type="text/javascript">
+            function registrar(){
+                $('#formDos').show();
+                $('#registrarse').hide();
+                $('#form').hide();
+            }
+            
+            function volver(){
+                $('#formDos').hide();
+                $('#registrarse').show();
+                $('#form').show()();
+            }
+            
+            function verEmpresa(){
+                var tipoUsuario = $('.selectTipoUsuario')[0];
+                if(tipoUsuario.value == 3){
+                    $('.empresaPertenece').show();
+                }else{
+                    $('.empresaPertenece').hide();
+                }
+            }
+            
+        </script>
+    </h:body>
+</html>
+
